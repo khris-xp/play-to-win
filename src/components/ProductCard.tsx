@@ -1,19 +1,20 @@
 import Image from "next/image";
+import { ProductResponseType } from "../types/product.type";
 
-export default function ProductCard() {
+export default function ProductCard({ product }: { product: ProductResponseType }) {
   return (
     <div className="space-y-6 overflow-hidden rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
       <a href="#" className="overflow-hidden rounded">
         <Image
           className="mx-auto h-44 w-44 dark:hidden"
-          src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg"
+          src={product.image}
           alt="imac image"
           width={80}
           height={80}
         />
         <Image
           className="mx-auto hidden h-44 w-44 dark:block"
-          src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg"
+          src={product.image}
           alt="imac image"
           width={80}
           height={80}
@@ -24,19 +25,15 @@ export default function ProductCard() {
           href="#"
           className="text-lg font-semibold leading-tight text-gray-900 hover:underline dark:text-white"
         >
-          iMac 27”
+          {product.name}
         </a>
-        <p className="mt-2 text-base font-normal text-gray-500 dark:text-gray-400">
-          This generation has some improvements, including a longer continuous
-          battery life.
+        <p className="mt-2 text-xs font-normal text-gray-500 dark:text-gray-400">
+          {product.description}
         </p>
       </div>
       <div>
-        <p className="text-lg font-bold text-gray-900 dark:text-white">
-          <span className="line-through"> $399,99 </span>
-        </p>
         <p className="text-lg font-bold leading-tight text-red-600 dark:text-red-500">
-          $299
+          ${product.price}
         </p>
       </div>
       <div className="mt-6 flex items-center gap-2.5">

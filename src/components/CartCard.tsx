@@ -1,20 +1,21 @@
+import { CartItemType } from "@/types/cart-item.type";
 import Image from "next/image";
 
-export default function CartCard() {
+export default function CartCard({ cartItem }: { cartItem: CartItemType }) {
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
       <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
         <a href="#" className="shrink-0 md:order-1">
           <Image
             className="h-20 w-20 dark:hidden"
-            src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front.svg"
+            src={cartItem.product_image}
             alt="imac image"
             width={80}
             height={80}
           />
           <Image
             className="hidden h-20 w-20 dark:block"
-            src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/imac-front-dark.svg"
+            src={cartItem.product_image}
             alt="imac image"
             width={80}
             height={80}
@@ -80,7 +81,7 @@ export default function CartCard() {
           </div>
           <div className="text-end md:order-4 md:w-32">
             <p className="text-base font-bold text-gray-900 dark:text-white">
-              $1,499
+              ${cartItem.product_price}
             </p>
           </div>
         </div>
@@ -90,8 +91,14 @@ export default function CartCard() {
             href="#"
             className="text-base font-medium text-gray-900 hover:underline dark:text-white"
           >
-            PC system All in One APPLE iMac (2023) mqrq3ro/a, Apple M3, 24&quot;
-            Retina 4.5K, 8GB, SSD 256GB, 10-core GPU, Keyboard layout INT
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {cartItem.product_name}
+              </h3>
+            </div>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+            {cartItem.product_description}
+          </p>
           </a>
 
           <div className="flex items-center gap-4">
