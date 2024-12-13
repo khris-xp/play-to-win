@@ -1,15 +1,31 @@
+"use client";
+
+import DiscountCategoryBlock from "@/components/Block/DiscountCategoryBlock";
+import DiscountFixedAmountBlock from "@/components/Block/DiscountFixedAmountBlock";
+import DiscountPercentageBlock from "@/components/Block/DiscountPercentageBlock";
+import DiscountPointBlock from "@/components/Block/DiscountPointBlock";
+import DiscountSpecialBlock from "@/components/Block/DiscountSpecialBlock";
 import CartCard from "@/components/CartCard";
-import { Input } from "@/components/Input";
+import { Dropdown } from "@/components/Dropdown";
 import ProductCard from "@/components/ProductCard";
+import { DISCOUNT_TYPE, DiscountType } from "@/constants/discount-type";
 import { CartItemType } from "@/types/cart-item.type";
 import { ProductResponseType } from "@/types/product.type";
+import { useState } from "react";
 
 export type HomeContainerProps = {
   cartItem: CartItemType[];
-  product: ProductResponseType[]
+  product: ProductResponseType[];
+  cartId: string;
 };
 
-export default function HomeContainer({ cartItem, product }: HomeContainerProps) {
+export default function HomeContainer({
+  cartItem,
+  product,
+  cartId,
+}: HomeContainerProps) {
+  const [discountType, setDiscountType] = useState(DiscountType.FIXED_AMOUNT);
+  const [discount, setDiscount] = useState(0);
   return (
     <section className="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
       <div className="mx-auto mt-10 max-w-screen-xl px-4 2xl:px-0">
@@ -57,14 +73,20 @@ export default function HomeContainer({ cartItem, product }: HomeContainerProps)
                     </dd>
                   </dl>
 
-                  <dl className="flex items-center justify-between gap-4">
-                    <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
-                      Savings
-                    </dt>
-                    <dd className="text-base font-medium text-green-600">
-                      -$299.00
-                    </dd>
-                  </dl>
+                  {discount > 0 && (
+                    <dl className="flex items-center justify-between gap-4">
+                      <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
+                        Savings
+                      </dt>
+                      <dd className="text-base font-medium text-green-600">
+                        -${" "}
+                        {cartItem.reduce(
+                          (acc, item) => acc + item.total_price,
+                          0
+                        ) - discount}
+                      </dd>
+                    </dl>
+                  )}
 
                   <dl className="flex items-center justify-between gap-4">
                     <dt className="text-base font-normal text-gray-500 dark:text-gray-400">
@@ -90,7 +112,14 @@ export default function HomeContainer({ cartItem, product }: HomeContainerProps)
                     Total
                   </dt>
                   <dd className="text-base font-bold text-gray-900 dark:text-white">
-                    $8,191.00
+                    {discount > 0
+                      ? discount + 799 + 99
+                      : cartItem.reduce(
+                          (acc, item) => acc + item.total_price,
+                          0
+                        ) +
+                        799 +
+                        99}
                   </dd>
                 </dl>
               </div>
@@ -131,33 +160,46 @@ export default function HomeContainer({ cartItem, product }: HomeContainerProps)
                 </a>
               </div>
             </div>
-
-            <div className="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6">
-              <form className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="voucher"
-                    className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    {" "}
-                    Do you have a voucher or gift card?{" "}
-                  </label>
-                  <Input
-                    type="text"
-                    id="voucher"
-                    name="voucher"
-                    placeholder="Enter your code"
-                    className="w-full"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="flex w-full items-center justify-center rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Apply Code
-                </button>
-              </form>
-            </div>
+            <Dropdown
+              options={DISCOUNT_TYPE}
+              onChange={(value) => setDiscountType(value as DiscountType)}
+              value={discountType}
+            />
+            {discountType === DiscountType.FIXED_AMOUNT && (
+              <DiscountFixedAmountBlock
+                cartId={cartId}
+                discount={discount}
+                setDiscount={setDiscount}
+              />
+            )}
+            {discountType === DiscountType.PERCENTAGE && (
+              <DiscountPercentageBlock
+                cartId={cartId}
+                setDiscount={setDiscount}
+                discount={discount}
+              />
+            )}
+            {discountType === DiscountType.POINT && (
+              <DiscountPointBlock
+                cartId={cartId}
+                setDiscount={setDiscount}
+                discount={discount}
+              />
+            )}
+            {discountType === DiscountType.CATEGORY && (
+              <DiscountCategoryBlock
+                cartId={cartId}
+                setDiscount={setDiscount}
+                discount={discount}
+              />
+            )}
+            {discountType === DiscountType.SPECIAL && (
+              <DiscountSpecialBlock
+                cartId={cartId}
+                setDiscount={setDiscount}
+                discount={discount}
+              />
+            )}
           </div>
         </div>
       </div>

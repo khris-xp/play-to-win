@@ -15,6 +15,7 @@ export default async function Home() {
       <HomeContainer
         cartItem={cartItem?.data || []}
         product={product?.data || []}
+        cartId={cart.data?.[0]?.ID || ""}
       />
     </div>
   );

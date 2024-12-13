@@ -1,3 +1,5 @@
+"use server";
+
 import { CartItemType } from "@/types/cart-item.type";
 import { baseApiAction } from "./baseApiAction";
 
